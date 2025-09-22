@@ -1,5 +1,5 @@
 # yale-designexplore
-# 🎮 Interactive Game Zine for Software for People F'25
+# 🎮 Webzine for Software for People F'25
 
 **Explore Yale’s design scene one step at a time.**  
 
