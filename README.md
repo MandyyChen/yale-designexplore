@@ -20,9 +20,6 @@ No long brochures. No endless links. Just **walk, bump, and explore.**
 
 ## 🎯 Goal
 Make the Yale design community more visible and approachable by letting students play their way through it.
-All art and coding done by me! Thank you Professor Tiri for the support!
+All art and coding done by me. Thank you Professor Tiri for the support!
 
 ---
-
-## 🚀 Stretch Goals
-- Real-time multiplayer using sockets so players can see others exploring
