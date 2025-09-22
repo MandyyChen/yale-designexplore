@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Explore Around!</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a href="index.html" class="link">← Home</a>
+    <strong style="flex:1">Explore the Map</strong>
+    <button id="settingsButton">
+        <img src="setting.png" alt="Settings" />
+    </button>
+  </header>
+
+  <main class="map" id="map">
+    <!-- character -->
+    <div id="player" class="player"></div>
+
+    <!-- hubs (need to make this more efficient oops)-->
+    <img class="spot" src="spot.png" data-info="DFA | human-centered design club #pleasejoin." style="left:40%; top:30%">
+    <img class="spot" src="spot.png" data-info="CCAM | collaborative arts & media, talks and tech." style="left:70%; top:60%">
+    <img class="spot" src="spot.png" data-info="CEID | makerspace for design & engineering." style="left:20%; top:70%">
+    <img class="spot" src="spot.png" data-info="Yale School of Art | where all the best classes are held." style="left:60%; top:20%">
+    <img class="spot" src="spot.png" data-info="Yale School of Architecture | this is a so incredibly cool place." style="left:80%; top:40%">
+    <img class="spot" src="spot.png" data-info="Yale Art Gallery | home to a diverse collection of art, open to all!" style="left:30%; top:50%">
+    <img class="spot" src="spot.png" data-info="Amoriem Labs | yale's only undergraduate video game development club." style="left:50%; top:80%">
+    <img class="spot" src="spot.png" data-info="Mandy Chen | surprise! you found me. i love computing & the arts." style="left:10%; top:20%">
+    <img class="spot" src="spot.png" data-info="ART 3769 | software for people: web programming class." style="left:75%; top:10%">
+    <img class="spot" src="spot.png" data-info="Loria Center | used to be a art history building!" style="left:15%; top:40%">
+    <img class="spot" src="spot.png" data-info="Yale Designathon | yale's first ever designathon. here @ tsai. " style="left:45%; top:10%">
+  </main>
+
+  <!-- info popup -->
+  <div id="popup" class="popup hidden">
+    <p id="popupText"></p>
+    <button id="closeButton" class="button secondary">Close</button>
+  </div>
+
+  <!-- settings popup -->
+  <div id="settingsPopup" class="settings-popup hidden">
+    <header class="settings-header">Settings</header>
+    <div class="settings-body">
+      <label style="display:flex; align-items:center; gap:.6rem; margin-bottom:1rem">
+        <input id="musicToggle" type="checkbox" />
+        <span>Disable background music</span>
+      </label>
+      <p> This zine was made by Mandy Chen for Software for People! Thank you Professor Tiri for your guidance and support.</p>
+      <p> If you have any questions, email mandy.chen@yale.edu </p>
+      <button id="closeSettings" class="button">Close</button>
+    </div>
+  </div>
+
+  <!-- i want music -->
+   <audio id="bgMusic" loop>
+  <source src="music.mp3" type="audio/mpeg">  
+  </audio>
+
+  <script src="app.js"></script>
+</body>
+</html>

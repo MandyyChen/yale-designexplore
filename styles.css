@@ -1,0 +1,166 @@
+body { 
+    margin: 0; 
+    font-family: system-ui, sans-serif; 
+    color:#111; }
+
+.center { 
+    min-height: 100svh; 
+    display: grid; 
+    place-items: center; 
+    background:#ffffff; }
+
+h1 { 
+    margin:.2rem 0 .6rem; 
+    font-size:clamp(20px,4vw,28px); }
+
+p { color:#444; }
+
+.button { 
+    display:inline-block; 
+    padding:8px 14px; 
+    border-radius:8px; 
+    text-decoration:none; 
+    font-weight:600; 
+    cursor:pointer; 
+}
+.button.secondary { 
+    background:#fff; 
+    color:#111; 
+    border:2px solid #111; 
+}
+.topbar { 
+    display:flex; 
+    align-items:center; 
+    gap:12px; 
+    padding:10px 14px; 
+    border-bottom:1px solid #ddd; 
+    background:#fff; 
+    position:sticky; 
+    top:0; 
+}
+
+.link { 
+    text-decoration:none; 
+    color:#111; 
+}
+
+.map {
+  position: relative;
+  width: 900px; height: 650px;
+  margin: 20px auto;
+  background: #fff; 
+}
+
+.player {
+  position:absolute; 
+  width:30px; 
+  height:30px; 
+  border-radius:50%; 
+  background:rgb(0, 0, 0);
+  left:285px; 
+  top:185px;
+}
+
+.spot {
+  position:absolute;
+  width:70px;
+  height:70px;
+  cursor:pointer;
+}
+
+.popup, .settings-popup {
+  position:fixed; 
+  top:50%; 
+  left:50%; 
+  transform:translate(-50%,-50%);
+  background:#fff; 
+  border:2px solid #111; 
+  border-radius:8px; padding:16px 20px;
+  box-shadow:0 10px 20px rgba(0,0,0,.2);
+  z-index:100;
+}
+
+.hidden {
+  display: none;
+}
+
+#settingsButton {
+  background: none;   
+  border: none;       
+  padding: 0;       
+  cursor: pointer;
+}
+
+#settingsButton img {
+  width: 60px;
+  height: 60px;    
+  display: block; 
+}
+
+.settings-popup { 
+    width:300px; 
+}
+
+.settings-header { 
+    background:#eee; 
+    padding:8px 12px; 
+    font-weight:bold; 
+    margin:-16px -20px 12px -20px; 
+    border-bottom:2px solid #111; 
+}
+
+.dialog-box {
+  border: 2px solid #111;
+  border-radius: 8px;
+  padding: 10px 12px;        
+  background: transparent;     
+  max-width: 420px;
+  margin: 0 auto;             
+  min-height: 56px;           
+  display: flex;
+  align-items: center;         
+}
+
+.dialog {
+  margin: 0;                
+  font-size: 1rem;
+  line-height: 1.4;          
+  white-space: pre-wrap;
+}
+
+.cursor {
+  display: inline-block;
+  width: 0.5ch;
+  animation: blink 1s steps(1, end) infinite;
+}
+
+.hint {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  margin: 10px auto 6px;     
+  text-align: center;
+  max-width: 420px;
+}
+
+#startBtn {
+  margin: 6px auto 0;          
+  display: inline-block;
+}
+
+#startBtn.hidden { display: none; }
+
+
+.card {
+  text-align: center;
+  background: #fff;
+  margin: 40px auto;
+  padding: 40px 24px;          
+  max-width: 520px;            
+}
+
+
+.intro-img {
+  display: block;
+  margin: 0 auto 12px;
+  width: 300px;               
+}
