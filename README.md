@@ -12,7 +12,7 @@ No long brochures. No endless links. Just **walk, bump, and explore.**
 ---
 
 ## ✨ Features
-- 🗺️ **Campus Map** — stylized, colorful, zine-like art  
+- 🗺️ **Campus Map** — zine-like art  
 - 🔵 **Hotspots** — reveal clubs, makerspaces, and courses  
 - 🎲 **Playful Interaction** — find all the design opportunities (and maybe even find me 👀)  
 
@@ -20,6 +20,7 @@ No long brochures. No endless links. Just **walk, bump, and explore.**
 
 ## 🎯 Goal
 Make the Yale design community more visible and approachable by letting students play their way through it.
+All art and coding done by me! Thank you Professor Tiri for the support!
 
 ---
 
