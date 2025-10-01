@@ -1,99 +1,145 @@
-// turn from html to js array
-const spotArray = [
-  { x: 40, y: 30, info: "DFA — human-centered design club #pleasejoin." },
-  { x: 70, y: 60, info: "CCAM — collaborative arts & media, talks and tech." },
-  { x: 100, y: 90, info: "Yale Art Gallery — explore the world of art." },
-  { x: 130, y: 120, info: "Design Lab — hands-on design projects." },
-  { x: 160, y: 150, info: "Maker Space — create and innovate." }
-];
+// DOM refs
+const viewport = document.getElementById("viewport");
+const world = document.getElementById("world");
+const playerEl = document.getElementById("player");
+const playerSprite = document.getElementById("playerSprite");
 
-// load all necessary DOM elements
-const player = document.getElementById("player");
-const spots = document.querySelectorAll(".spot");
+const spotsEls = document.querySelectorAll(".spot");
 const popup = document.getElementById("popup");
 const popupText = document.getElementById("popupText");
-const closeBtn = document.getElementById("closeBtn");
-const settingsBtn = document.getElementById("settingsBtn");
+const closeButton = document.getElementById("closeButton");
+
+const settingsButton = document.getElementById("settingsButton");
 const settingsPopup = document.getElementById("settingsPopup");
 const closeSettings = document.getElementById("closeSettings");
 
-// initial player position and movement speed
-let pos = { x: 285, y: 185 };
-const speed = 5;
+const progressBar = document.getElementById("progressBar");
+const progressLabel = document.getElementById("progressLabel");
 
-const musicToggle = document.getElementById("musicToggle"); // checked = mute
+const musicToggle = document.getElementById("musicToggle");
 const bgMusic = document.getElementById("bgMusic");
 
-document.addEventListener("DOMContentLoaded", () => {
-  if (!musicToggle.checked) {
-    bgMusic.play().catch(() => {
-    });
-  }
+// world sizes
+const WORLD_W = world.offsetWidth;
+const WORLD_H = world.offsetHeight;
+
+// player state
+const player = {
+  x: WORLD_W * 0.45,
+  y: WORLD_H * 0.45,
+  r: 20,          
+  speed: 2.2
+};
+
+// parse spots (from % positions to world px)
+const spots = Array.from(spotsEls).map(el => {
+  const pctX = parseFloat(el.style.left);
+  const pctY = parseFloat(el.style.top);
+  const x = (pctX / 100) * WORLD_W;
+  const y = (pctY / 100) * WORLD_H;
+  return {
+    id: el.dataset.id || `${pctX}-${pctY}`,
+    el, x, y,
+    r: 30, // spot image is 60x60
+    discovered: false,
+    info: el.dataset.info || "Hotspot"
+  };
 });
 
+// HUD
+function updateProgress() {
+  const total = spots.length;
+  const found = spots.filter(s => s.discovered).length;
+  const pct = total ? Math.round((found / total) * 100) : 0;
+  progressBar.style.width = pct + "%";
+  progressLabel.textContent = `${found}/${total}`;
+}
+
+// camera
+function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+function viewportSize() { return { w: viewport.clientWidth, h: viewport.clientHeight }; }
+function updateCamera() {
+  const { w: VPW, h: VPH } = viewportSize();
+  const cx = clamp(player.x - VPW / 2, 0, WORLD_W - VPW);
+  const cy = clamp(player.y - VPH / 2, 0, WORLD_H - VPH);
+  world.style.transform = `translate(${-cx}px, ${-cy}px)`;
+}
+
+// render player
+function renderPlayer() {
+  playerEl.style.left = player.x + "px";
+  playerEl.style.top  = player.y + "px";
+}
+
+// movement
+const keys = {};
+addEventListener("keydown", e => keys[e.code] = true);
+addEventListener("keyup",   e => keys[e.code] = false);
+
+function tick() {
+  const s = (keys.ShiftLeft || keys.ShiftRight) ? player.speed * 1.6 : player.speed;
+  if (keys.KeyA || keys.ArrowLeft)  player.x -= s;
+  if (keys.KeyD || keys.ArrowRight) player.x += s;
+  if (keys.KeyW || keys.ArrowUp)    player.y -= s;
+  if (keys.KeyS || keys.ArrowDown)  player.y += s;
+
+  // clamp to world
+  player.x = clamp(player.x, player.r, WORLD_W - player.r);
+  player.y = clamp(player.y, player.r, WORLD_H - player.r);
+
+  // collisions
+  for (const spt of spots) {
+    if (!spt.discovered) {
+      const dx = player.x - spt.x;
+      const dy = player.y - spt.y;
+      const dist = Math.hypot(dx, dy);
+      if (dist < (player.r + spt.r)) {
+        spt.discovered = true;
+        spt.el.classList.add("discovered");
+        popupText.textContent = spt.info;
+        popup.classList.remove("hidden");
+        updateProgress();
+      }
+    }
+  }
+
+  renderPlayer();
+  updateCamera();
+  requestAnimationFrame(tick);
+}
+
+// popups & settings
+closeButton.addEventListener("click", () => popup.classList.add("hidden"));
+settingsButton.addEventListener("click", () => settingsPopup.classList.remove("hidden"));
+closeSettings.addEventListener("click", () => settingsPopup.classList.add("hidden"));
+
+// music
 let musicStarted = false;
-
-// setup keyboard controls
-document.addEventListener("keydown", (e) => {
-  let moved = false;
-
-  if (e.key === "ArrowUp") { pos.y -= speed; moved = true; }
-  if (e.key === "ArrowDown") { pos.y += speed; moved = true; }
-  if (e.key === "ArrowLeft") { pos.x -= speed; moved = true; }
-  if (e.key === "ArrowRight") { pos.x += speed; moved = true; }
-
-  if (moved) {
-    if (!musicStarted && !musicToggle.checked) {
-      bgMusic.play().catch(() => { });
-      musicStarted = true;
-    }
-    updatePlayer();
-    checkCollision();
+function tryStartMusic() {
+  if (!musicStarted && bgMusic && musicToggle && !musicToggle.checked) {
+    bgMusic.play().catch(()=>{});
+    musicStarted = true;
   }
-});
-
+}
+addEventListener("keydown", tryStartMusic);
+addEventListener("click", tryStartMusic);
 musicToggle.addEventListener("change", () => {
-  if (musicToggle.checked) {
-    bgMusic.pause();
-  } else {
-    bgMusic.play().catch(() => {});
+  if (musicToggle.checked) bgMusic.pause();
+  else bgMusic.play().catch(()=>{});
+});
+
+// init
+function init() {
+  // position DOM spots by world coords
+  for (const s of spots) {
+    s.el.style.left = s.x + "px";
+    s.el.style.top  = s.y + "px";
+    s.el.style.transform = "translate(-50%, -50%)";
   }
-});
-
-// update player position on screen
-function updatePlayer() {
-  player.style.left = pos.x + "px";
-  player.style.top = pos.y + "px";
+  renderPlayer();
+  updateProgress();
+  updateCamera();
+  requestAnimationFrame(tick);
 }
-
-// if player overlaps a spot, show popup
-function checkCollision() {
-  const playerRect = player.getBoundingClientRect();
-
-  spots.forEach((spot) => {
-    const spotRect = spot.getBoundingClientRect();
-    const overlap = !(
-      playerRect.right < spotRect.left ||
-      playerRect.left > spotRect.right ||
-      playerRect.bottom < spotRect.top ||
-      playerRect.top > spotRect.bottom
-    );
-
-    if (overlap) {
-      popupText.textContent = spot.dataset.info;
-      popup.classList.remove("hidden");
-    }
-  });
-}
-
-closeButton.addEventListener("click", () => {
-  popup.classList.add("hidden");
-});
-
-settingsButton.addEventListener("click", () => {
-  settingsPopup.classList.remove("hidden");
-});
-
-closeSettings.addEventListener("click", () => {
-  settingsPopup.classList.add("hidden");
-});
+window.addEventListener("DOMContentLoaded", init);
+window.addEventListener("resize", updateCamera);
