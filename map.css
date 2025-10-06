@@ -171,6 +171,13 @@
     inset 0 -2px 3px rgba(0,0,0,0.6);
   transition: background .1s;
 }
+
+.gm-pad {
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 .gm-pad:hover  { background:#444; }
 .gm-pad:active { background:#555; }
 .gm-up   { grid-area: up; }
