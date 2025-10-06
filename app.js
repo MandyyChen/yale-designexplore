@@ -1,4 +1,3 @@
-
 // ----- DOM refs -----
 const gmOpenDex    = document.getElementById("gm-openDex");
 const gmDexOverlay = document.getElementById("gm-dexOverlay");
@@ -51,7 +50,6 @@ function gmSizeWorldFromImage() {
 // ----- Player -----
 const gmPlayer = { x: 0, y: 0, r: 20, speed: 2.2 };
 let currentDir = "down";
-
 
 const TOTAL_FRAMES = 3;
 const FRAME_W = 27; 
@@ -132,54 +130,6 @@ function gmUpdateProgress() {
   }
 }
 
-// Open Pokédex
-if (gmOpenDex) {
-  gmOpenDex.addEventListener("click", () => {
-    gmRenderDex();
-    gmDexOverlay.classList.remove("gm-hidden");
-  });
-}
-
-// Close Pokédex
-if (gmCloseDex) {
-  gmCloseDex.addEventListener("click", () => {
-    gmDexOverlay.classList.add("gm-hidden");
-  });
-}
-
-function gmRenderDex() {
-  if (!gmDexList) return;
-  gmDexList.innerHTML = "";
-
-  gmSpots.forEach(spt => {
-    const tpl = document.getElementById("tpl-" + spt.id);
-
-    const card = document.createElement("div");
-    card.className = "gm-dex-card" + (spt.discovered ? "" : " locked");
-
-    const img = document.createElement("img");
-    const tplImg = tpl?.content.querySelector(".gm-popup-img img");
-    img.src = spt.discovered ? (tplImg?.getAttribute("src") || "spot.png") : "spot.png";
-    img.alt = spt.id;
-
-    const textWrap = document.createElement("div");
-    const h3 = document.createElement("h3");
-    const title = tpl?.content.querySelector(".gm-popup-title")?.textContent || spt.id;
-    h3.textContent = spt.discovered ? title : "Unknown Location";
-
-    const p = document.createElement("p");
-    const firstP = tpl?.content.querySelector(".gm-popup-desc p")?.textContent || "";
-    p.textContent = spt.discovered ? firstP : "Not yet discovered.";
-
-    textWrap.appendChild(h3);
-    textWrap.appendChild(p);
-    card.appendChild(img);
-    card.appendChild(textWrap);
-
-    gmDexList.appendChild(card);
-  });
-}
-
 // ----- Camera -----
 function gmClamp(n, min, max) {
   return Math.max(min, Math.min(max, n));
@@ -203,6 +153,40 @@ addEventListener("keydown", (e) => {
 addEventListener("keyup", (e) => {
   gmKeys[e.code] = false;
 });
+
+// === Bind on-screen D-pad buttons to key states ===
+function gmPressKey(code, down) {
+  gmKeys[code] = down;
+  if (down) {
+    // optional: set direction immediately for snappy feedback
+    if (code === 'ArrowUp') gmSetDirection('up');
+    else if (code === 'ArrowDown') gmSetDirection('down');
+    else if (code === 'ArrowLeft') gmSetDirection('left');
+    else if (code === 'ArrowRight') gmSetDirection('right');
+    gmTryStartMusic();
+  }
+}
+function gmBindHold(selector, code) {
+  const el = document.querySelector(selector);
+  if (!el) return;
+
+  const down = (e) => { e.preventDefault(); gmPressKey(code, true); };
+  const up   = (e) => { e.preventDefault(); gmPressKey(code, false); };
+
+  // Pointer API covers mouse + touch
+  el.addEventListener('pointerdown', down);
+  el.addEventListener('pointerup', up);
+  el.addEventListener('pointercancel', up);
+  el.addEventListener('pointerleave', up);
+
+  // Also handle click taps (quick press)
+  el.addEventListener('click', (e) => { e.preventDefault(); });
+}
+// Wire the four arrows
+gmBindHold('.gm-up', 'ArrowUp');
+gmBindHold('.gm-down', 'ArrowDown');
+gmBindHold('.gm-left', 'ArrowLeft');
+gmBindHold('.gm-right', 'ArrowRight');
 
 function gmTick() {
   const s =
@@ -312,6 +296,51 @@ if (gmCloseButton)
 if (gmExitBtn) {
   gmExitBtn.addEventListener("click", () => {
     window.location.href = "index.html";
+  });
+}
+
+// ----- Pokédex (open/close + render) -----
+if (gmOpenDex) {
+  gmOpenDex.addEventListener("click", () => {
+    gmRenderDex();
+    gmDexOverlay.classList.remove("gm-hidden");
+  });
+}
+if (gmCloseDex) {
+  gmCloseDex.addEventListener("click", () => {
+    gmDexOverlay.classList.add("gm-hidden");
+  });
+}
+function gmRenderDex() {
+  if (!gmDexList) return;
+  gmDexList.innerHTML = "";
+
+  gmSpots.forEach(spt => {
+    const tpl = document.getElementById("tpl-" + spt.id);
+
+    const card = document.createElement("div");
+    card.className = "gm-dex-card" + (spt.discovered ? "" : " locked");
+
+    const img = document.createElement("img");
+    const tplImg = tpl?.content.querySelector(".gm-popup-img img");
+    img.src = spt.discovered ? (tplImg?.getAttribute("src") || "spot.png") : "spot.png";
+    img.alt = spt.id;
+
+    const textWrap = document.createElement("div");
+    const h3 = document.createElement("h3");
+    const title = tpl?.content.querySelector(".gm-popup-title")?.textContent || spt.id;
+    h3.textContent = spt.discovered ? title : "Unknown Location";
+
+    const p = document.createElement("p");
+    const firstP = tpl?.content.querySelector(".gm-popup-desc p")?.textContent || "";
+    p.textContent = spt.discovered ? firstP : "Not yet discovered.";
+
+    textWrap.appendChild(h3);
+    textWrap.appendChild(p);
+    card.appendChild(img);
+    card.appendChild(textWrap);
+
+    gmDexList.appendChild(card);
   });
 }
 
