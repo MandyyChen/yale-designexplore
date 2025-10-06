@@ -3,24 +3,48 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Design Map — Start</title>
+  <title>Design Dex</title>
+  <link rel="icon" type="image/png" href="icon.png" />
   <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
 </head>
-<body class="center">
+<body>
+  <!-- DS Shell -->
+  <div class="ds-root">
+  <div class="ds-shell">
+    
+  <!-- TOP SCREEN -->
+  <section class="ds-screen top">
+    <main class="viewport viewport-intro" aria-label="Intro viewport">
+      <img src="homeimage.jpeg" alt="Welcome" class="intro-img" />
+    </main>
+  </section>
 
-<main class="card" id="dialogCard" tabindex="0" aria-live="polite">
+  <!-- HINGE  -->
+  <div class="ds-hinge"></div>
 
-  <img src="oak.png" alt="Dino Doodle" class="intro-img" />
+    <!-- BOTTOM SCREEN  -->
+    <section class="ds-screen bottom">
+      <main class="viewport viewport-dialog" id="dialogCard" aria-label="Dialogue viewport">
+        <div class="intro-wrap">
+          <div class="dialog-box">
+            <div class="dialog" id="dialogText"></div>
+          </div>
+          <div class="hint" id="hint">click / tap / press space to advance</div>
+        </div>
+      </main>
+    </section>
 
-
-  <div class="dialog-box">
-    <div class="dialog" id="dialogText"></div>
   </div>
-  <div class="hint" id="hint">click / tap / press space to advance</div>
-  <button id="startBtn" class="button hidden" onclick="location.href='map.html'">Start →</button>
-</main>
-
-<script src="intro.js"></script>
+</div>
   
+
+  <!-- Background music -->
+  <audio id="bgMusic" preload="auto" loop>
+    <source src="homemusic.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script src="intro.js"></script>
 </body>
 </html>

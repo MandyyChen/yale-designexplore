@@ -3,75 +3,237 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Explore Around!</title>
+  <title>Design Dex</title>
+
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="map.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div class="ds-root">
+    <div class="ds-shell">
 
-  <header class="topbar">
-    <a href="index.html" class="link">← Home</a>
-    <strong style="flex:1">Explore the Map</strong>
-    <button id="settingsButton" class="icon-btn" aria-label="Open settings">
-      <img src="setting.png" alt="" />
-    </button>
-  </header>
+      <!-- TOP SCREEN -->
+      <section class="ds-screen top" aria-label="Top Screen">
+        <div class="gm-viewport" id="gm-viewport" aria-label="Game viewport">
+          <div class="gm-world" id="gm-world">
+            <img src="map.jpg" class="gm-map-image" alt="Stylized Yale design map" />
+          <div id="gm-player" class="gm-player" aria-label="Player">
+            <img id="gm-playerSprite" src="lyra_down.png" alt="Lyra sprite" />
+          </div>
 
-  <main class="viewport" id="viewport" aria-label="Game viewport">
-    <div class="world" id="world">
-      <!-- background map image -->
-      <img src="map.jpg" class="map-image" alt="Stylized Yale design map" />
 
-      <!-- player sprite -->
-      <div id="player" class="player">
-        <img id="playerSprite" src="sprite.png" alt="" />
-      </div>
+            <!-- Hotspots-->
+            <img class="gm-spot" src="spot.png" data-id="dfa"         data-tpl="dfa"         style="left:40%; top:30%">
+            <img class="gm-spot" src="spot.png" data-id="ccam"        data-tpl="ccam"        style="left:70%; top:60%">
+            <img class="gm-spot" src="spot.png" data-id="ceid"        data-tpl="ceid"        style="left:20%; top:70%">
+            <img class="gm-spot" src="spot.png" data-id="ysa"         data-tpl="ysa"         style="left:60%; top:20%">
+            <img class="gm-spot" src="spot.png" data-id="ysoa"        data-tpl="ysoa"        style="left:80%; top:40%">
+            <img class="gm-spot" src="spot.png" data-id="yag"         data-tpl="yag"         style="left:30%; top:50%">
+            <img class="gm-spot" src="spot.png" data-id="amori"       data-tpl="amori"       style="left:50%; top:80%">
+            <img class="gm-spot" src="spot.png" data-id="mandy"       data-tpl="mandy"       style="left:10%; top:20%">
+            <img class="gm-spot" src="spot.png" data-id="art376"      data-tpl="art376"      style="left:75%; top:10%">
+            <img class="gm-spot" src="spot.png" data-id="loria"       data-tpl="loria"       style="left:15%; top:40%">
+            <img class="gm-spot" src="spot.png" data-id="designathon" data-tpl="designathon" style="left:45%; top:10%">
+          </div>
 
-      <!-- hotspots -->
-      <img class="spot" src="spot.png" data-id="dfa"   data-info="DFA | human-centered design club #pleasejoin." style="left:40%; top:30%">
-      <img class="spot" src="spot.png" data-id="ccam"  data-info="CCAM | collaborative arts & media, talks and tech." style="left:70%; top:60%">
-      <img class="spot" src="spot.png" data-id="ceid"  data-info="CEID | makerspace for design & engineering." style="left:20%; top:70%">
-      <img class="spot" src="spot.png" data-id="ysa"   data-info="Yale School of Art | where all the best classes are held." style="left:60%; top:20%">
-      <img class="spot" src="spot.png" data-id="ysoa"  data-info="Yale School of Architecture | this is an incredibly cool place." style="left:80%; top:40%">
-      <img class="spot" src="spot.png" data-id="yag"   data-info="Yale Art Gallery | home to a diverse collection of art, open to all!" style="left:30%; top:50%">
-      <img class="spot" src="spot.png" data-id="amori" data-info="Amoriem Labs | yale's only undergraduate video game development club." style="left:50%; top:80%">
-      <img class="spot" src="spot.png" data-id="mandy" data-info="Mandy Chen | surprise!" style="left:10%; top:20%">
-      <img class="spot" src="spot.png" data-id="art376" data-info="ART 376 | software for people: web programming class." style="left:75%; top:10%">
-      <img class="spot" src="spot.png" data-id="loria" data-info="Loria Center | used to be an art history building!" style="left:15%; top:40%">
-      <img class="spot" src="spot.png" data-id="designathon" data-info="Yale Designathon | yale's first ever designathon. here @ tsai." style="left:45%; top:10%">
-    </div>
-      <div class="hud">
-    <div class="hud-card progress">
-      <div id="progressBar" class="progress-bar"></div>
-      <span id="progressLabel" class="progress-label">0/0</span>
+          <!-- HUD -->
+          <div class="gm-hud" aria-label="HUD">
+            <button id="gm-openDex" class="gm-dexbtn" aria-label="Open Pokédex">
+              <img src="designdex.png" alt="Pokédex icon">
+            </button>
+
+            <div class="gm-hud-card">
+              <div style="font-weight:700; margin-bottom:6px; font-size:12px;">Discoveries</div>
+              <div class="gm-progress">
+                <div id="gm-progressBar" class="gm-progress-bar"></div>
+                <span id="gm-progressLabel" class="gm-progress-label">0/0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- HOTSPOT POPUP -->
+          <div id="gm-popup" class="gm-popup gm-hidden" role="dialog" aria-modal="true" aria-label="Hotspot details">
+            <div class="gm-popup-box">
+              <div id="gm-popupText"></div>
+              <button id="gm-closeButton" class="button secondary">Close</button>
+            </div>
+          </div>
+
+          <!-- SETTINGS OVERLAY -->
+          <div id="gm-settingsOverlay" class="gm-settings-overlay gm-hidden" role="dialog" aria-modal="true" aria-label="Settings">
+            <button id="gm-closeSettings" class="gm-settings-close" aria-label="Close settings">✕</button>
+            <div class="gm-settings-panel">
+              <h2 class="gm-settings-title">Settings</h2>
+              <p>This zine was made by Mandy Chen for Software for People!</p>
+              <label class="gm-mute-inline">
+                <input id="gm-musicToggle" type="checkbox" />
+                <span>Mute music</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- POKEDEX OVERLAY-->
+          <div id="gm-dexOverlay" class="gm-dex-overlay gm-hidden" role="dialog" aria-modal="true" aria-label="Discovery Log">
+            <button id="gm-closeDex" class="gm-settings-close" aria-label="Close Dex">✕</button>
+            <div class="gm-dex-panel">
+              <h2 class="gm-dex-title">Discovery Log</h2>
+              <div id="gm-dexList" class="gm-dex-list"></div>
+            </div>
+          </div>
+
+          <!-- POPUP CONTENT TEMPLATES-->
+          <template id="tpl-dfa">
+            <h2 class="gm-popup-title">Design for America (DFA)</h2>
+            <div class="gm-popup-img"><img src="dfa.png" alt="Design for America"></div>
+            <div class="gm-popup-desc">
+              <p>Yale’s human-centered design club connecting students across majors to tackle social impact challenges.
+              We partner with nonprofits and campus groups to research, prototype, and test ideas that matter. Expect workshops, sticky notes, and field interviews.
+              No prior design experience required—bring curiosity. Visit us at <a href="https://dfayale.org">dfayale.org</a></p>
+            </div>
+          </template>
+
+          <template id="tpl-ccam">
+            <h2 class="gm-popup-title">CCAM — Center for Collaborative Arts and Media</h2>
+            <div class="gm-popup-img"><img src="ccam.png" alt="CCAM"></div>
+            <div class="gm-popup-desc">
+              <p>The Yale Center for Collaborative Arts and Media (CCAM) is a vital space for interdisciplinary exploration. 
+                Led by a team of artist-producers, CCAM draws collaborators from both on- and off-campus to develop and 
+                experience bold experiments and transformative outcomes through its distinctive events, 
+                programs, and research initiatives. </p>
+            </div>
+          </template>
+
+          <template id="tpl-ceid">
+            <h2 class="gm-popup-title">CEID — Center for Engineering Innovation &amp; Design</h2>
+            <div class="gm-popup-img"><img src="ceid.png" alt="CEID"></div>
+            <div class="gm-popup-desc">
+              <p>The CEID is designed to provide students and faculty tools and resources for classes, design projects, 
+                and collaborative activities. It features multiple spaces: a lecture area and meeting rooms for 
+                the exploration of new ideas, a machine shop, a sheet metal area, a wood shop, a wet lab, and a 
+                studio for the creation of physical prototypes. </p>
+          </template>
+
+          <template id="tpl-ysa">
+            <h2 class="gm-popup-title">Yale School of Art</h2>
+            <div class="gm-popup-img"><img src="ysa.png" alt="Yale School of Art"></div>
+            <div class="gm-popup-desc">
+              <p>The School of Art is one of Yale’s Graduate & Professional Schools conferring MFA degrees in 
+                Graphic Design, Painting/Printmaking, Photography, and Sculpture; and offers undergraduate-level art 
+                courses to Yale College students. </p>
+            </div>
+          </template>
+
+          <template id="tpl-ysoa">
+            <h2 class="gm-popup-title">Yale School of Architecture</h2>
+            <div class="gm-popup-img"><img src="ysoa.png" alt="Yale School of Architecture"></div>
+            <div class="gm-popup-desc">
+              <p> In the twenty-first century, the Yale School of Architecture has continued on the path of 
+                excellence, bringing the most celebrated architects from around the world to teach advanced 
+                studios, adding to our renowned in-house faculty. The School is bolstered by the Yale Urban 
+                Design Workshop and the Center for Ecosystems in Architecture, which respectively contribute 
+                planning expertise to cities and conduct materials research. </p>
+            </div>
+          </template>
+
+          <template id="tpl-yag">
+            <h2 class="gm-popup-title">Yale University Art Gallery</h2>
+            <div class="gm-popup-img"><img src="yag.png" alt="Yale University Art Gallery"></div>
+            <div class="gm-popup-desc">
+              <p> Founded in 1832, the Gallery is the oldest university art museum in America. 
+                Today, it is a center for teaching, learning, and scholarship and is a preeminent 
+                cultural asset for Yale University, the wider academic community, and the public. 
+                The museum is open to all, free of charge, and is committed to engaging audiences. </p>
+            </div>
+          </template>
+
+          <template id="tpl-amori">
+            <h2 class="gm-popup-title">Amoriem Labs — Undergraduate Game Dev Club</h2>
+            <div class="gm-popup-img"><img src="amori.png" alt="Amoriem Labs"></div>
+            <div class="gm-popup-desc">
+              <p>Amoriem Labs is Yale's first and only video game development club! 
+                Led entirely by students, we unite passionate gamers, programers, artists, musicians, storytellers, 
+                and designers to bring digital worlds to life. Amoriem was founded in 2019 and 
+                has been making video games ever since. </p>
+            </div>
+          </template>
+
+          <template id="tpl-mandy">
+            <h2 class="gm-popup-title">Mandy Chen</h2>
+            <div class="gm-popup-img"><img src="mandyc.png" alt="Mandy Chen"></div>
+            <div class="gm-popup-desc">
+              <p><b>Surprise! You found me.</b></p>
+              <p>I'm Mandy, a sophomore at Yale studying Computing & the Arts.
+              I love to explore art and technology, and how they intersect in playful ways.
+              If I'm not leading DFA, you'll find me dancing with Yale Movement or drinking iced coffee.</p>
+            </div>
+          </template>
+
+          <template id="tpl-art376">
+            <h2 class="gm-popup-title">ART 376 — Software for People</h2>
+            <div class="gm-popup-img"><img src="art376.png" alt="ART 376"></div>
+            <div class="gm-popup-desc">
+              <p>In this studio course, students create work within the web browser to explore where the internet 
+                comes from, where it is today, and where it’s going. The course, taught by Professor Tiri, in particular focuses on the internet’s 
+                impact on art—and vice versa—and how technological advance often coincides with artistic development. </p>
+            </div>
+          </template>
+
+          <template id="tpl-loria">
+            <h2 class="gm-popup-title">Loria Center</h2>
+            <div class="gm-popup-img"><img src="loria.png" alt="Loria Center"></div>
+            <div class="gm-popup-desc">
+              <p>Art history and architecture home base with quiet corners and surprise exhibitions.</p>
+              <p>Great for photo walks—watch how light moves across concrete and thresholds.</p>
+            </div>
+          </template>
+
+          <template id="tpl-designathon">
+            <h2 class="gm-popup-title">Yale Designathon</h2>
+            <div class="gm-popup-img"><img src="designathon.png" alt="Yale Designathon"></div>
+            <div class="gm-popup-desc">
+              <p>The Yale Designathon is a three-day that brings together students from design, 
+                computer science, engineering, business, and the arts to explore creative problem-solving 
+                through rapid prototyping. Hosted at Tsai CITY, it offers workshops, mentorship, 
+                and networking opportunities that guide participants from ideation to tangible design outcomes. </p>
+            </div>
+          </template>
+        </div>
+      </section>
+
+      <!-- HINGE -->
+      <div class="ds-hinge"></div>
+
+      <!-- BOTTOM SCREEN -->
+      <section class="ds-screen bottom" aria-label="Bottom Screen">
+        <div class="gm-bottom-grid">
+          <!-- D-pad on the right -->
+          <div class="gm-controls-right">
+            <div class="gm-dpad" aria-label="D-pad">
+              <button class="gm-pad gm-up"    data-key="ArrowUp"    aria-label="Up">▲</button>
+              <button class="gm-pad gm-left"  data-key="ArrowLeft"  aria-label="Left">◀</button>
+              <button class="gm-pad gm-right" data-key="ArrowRight" aria-label="Right">▶</button>
+              <button class="gm-pad gm-down"  data-key="ArrowDown"  aria-label="Down">▼</button>
+            </div>
+          </div>
+
+          <!-- Settings + Exit centered -->
+          <div class="gm-settings-center">
+            <button id="gm-openSettings" class="gm-sysbtn">Settings</button>
+            <button id="gm-exit" class="gm-sysbtn">Exit</button>
+          </div>
+        </div>
+      </section>
+
     </div>
   </div>
-</main>
 
-
-  <!-- info popup -->
-  <div id="popup" class="popup hidden" role="dialog" aria-modal="true">
-    <p id="popupText"></p>
-    <button id="closeButton" class="button secondary">Close</button>
-  </div>
-
-  <!-- settings popup -->
-  <div id="settingsPopup" class="settings-popup hidden" role="dialog" aria-modal="true">
-    <header class="settings-header">Settings</header>
-    <div class="settings-body">
-      <label style="display:flex; align-items:center; gap:.6rem; margin-bottom:1rem">
-        <input id="musicToggle" type="checkbox" />
-        <span>Disable background music</span>
-      </label>
-      <p>This zine was made by Mandy Chen for Software for People!</p>
-      <button id="closeSettings" class="button">Close</button>
-    </div>
-  </div>
-
-  <!-- music -->
-  <audio id="bgMusic" loop>
-    <source src="assets/music.mp3" type="audio/mpeg">
+  <!-- Music -->
+  <audio id="bgMusic" preload="auto" loop>
+    <source src="homemusic.mp3" type="audio/mpeg" />
   </audio>
 
   <script src="app.js"></script>
 </body>
 </html>
+
